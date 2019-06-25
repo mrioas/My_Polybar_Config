@@ -1,0 +1,384 @@
+#############################
+;COLORES
+#############################
+[colors]
+;background = ${xrdb:color0:#222}
+;background = #000000
+;background-alt = #2A74FF
+;foreground = ${xrdb:color7:#222}
+foreground = #dfdfdf
+foreground-alt = #2A74FF
+primary = #ffb52a
+secondary = #353b48
+bordercolor = #9b59b6
+
+############################
+;BARRA
+############################
+[bar/mybar]
+MONITOR=$(polybar -m|tail -1|sed -e 's/:.*$//g')
+;monitor = ${env:MONITOR:HDMI1}
+;monitor = ${env:MONITOR:eDP1}
+width = 84%
+height = 30
+offset-x = 0
+offset-y = 4
+radius = 0
+fixed-center = true
+background = #000000
+foreground = ${colors.foreground}
+line-size = 2
+;bottom = true
+border-size = 1
+border-color = #00000000
+padding-left = 0
+padding-right = 0
+module-margin-left = 1
+module-margin-right = 1
+font-2 = TerminessTTF Nerd Font Mono:size = 11:style=regular:pixelsize=15
+font-7 = Font Awesome 5 Brands:style=Regular:pixelsize=15;1  
+font-0 = Nimbus Roman:style=Bold:size=11:pixelsize= 12,1
+font-4 = DejaVu Sans:style=Bold:pixelsize=15;1
+font-3 = "Material Icons:style=Regular:size=14:pixelsize=14;1:antialias=false"
+font-1 = Font Awesome 5 Free:style=Solid:size = 11:pixelsize=15;1: antialias=false
+font-5 = Noto Sans Symbols2:style=Regular: size = 9:pixelsize=11;1: antialias=false
+modules-left = xwindow isrunning-bluetooth menu-apps
+;modules-center = 
+modules-right = ip_pub xkeyboard system-cpu volume xbacklight filesystem memory  battery temperature popup-calendar playerctl 
+###########################
+
+;BARRA-BUTTON
+############################
+[bar/bottom]
+MONITOR=$(polybar -m|tail -1|sed -e 's/:.*$//g')
+;monitor = ${env:MONITOR:HDMI1}
+;monitor = ${env:MONITOR:eDP1}
+width = 15%
+height = 22
+offset-x = 85%
+offset-y = 0
+;bottom = true
+radius = 0
+fixed-center = true
+background = #B3
+foreground = ${colors.foreground}
+line-size = 2
+border-size = 1
+border-color = #00000000
+padding-left = 0
+padding-right = 0
+module-margin-left = 2
+module-margin-right = 2
+;
+tray-position = right
+tray-padding = 2
+;tray-detached = false
+;tray-offset-x = 0
+;tray-offset-y = 0
+;tray-maxsize = 16
+;tray-scale = 1
+tray-background = #607D8B
+;tray-underline = #ff5e57
+;tray-psuedo-transparency = true
+;
+font-2 = TerminessTTF Nerd Font Mono:size = 11:style=regular:pixelsize=15
+font-7 = Font Awesome 5 Brands:style=Regular:pixelsize=15;1  
+font-0 = Nimbus Roman:style=Bold:size=11:pixelsize= 12,1
+font-4 = DejaVu Sans:style=Bold:pixelsize=15;1
+font-3 = "Material Icons:style=Regular:size=14:pixelsize=14;1:antialias=false"
+font-1 = Font Awesome 5 Free:style=Solid:size = 11:pixelsize=15;1: antialias=false
+font-5 = Noto Sans Symbols2:style=Regular: size = 11:pixelsize=14;1: antialias=false
+modules-left = reset
+;modules-center = up-down ip_pub
+###########################
+
+[settings]
+screenchange-reload = true
+compositing-background = source
+compositing-foreground = over
+compositing-overline = over
+compositing-underline = over
+compositing-border = over
+##############################
+[global/wm]
+margin-top =4
+margin-bottom = 4
+
+############################
+;xwindow
+############################
+[module/xwindow]
+type = internal/xwindow
+label = %title%
+;label = %title:0:30:...%
+label-maxlen = 25	
+format-background = #5f27cd
+format-foreground = ${colors.foreground}
+###############################################
+;NETWORK SPEED wireless
+####################################
+[module/up-down-etho]
+type = internal/network
+interface = eno1
+interval = 2
+label-connected =🠹 %upspeed:0% 🠻 %downspeed:0%
+label-connected-foreground = #fa8231
+label-maxlen = 26
+label-minlen = 25
+################################
+;playerctl
+##################################
+[module/playerctl]
+type = custom/script
+format = <label>
+exec = ~/.config/polybar/plugins/playectl.sh 
+format-foreground = #26de81
+interval = 1
+;label-maxlen = 22
+##############################
+;alsa
+######################
+[module/volume]
+type = internal/alsa
+format-volume = <bar-volume><label-volume>
+bar-volume-width = 2
+;bar-volume-foreground-0 = #16A085
+bar-volume-indicator = " "
+bar-volume-fill =%{A3:pavucontrol:}🔊%{A}
+bar-volume-fill-foreground = #48dbfb
+bar-volume-empty =%{A3:pavucontrol:}🔊%{A}
+label-muted = 🔇 %percentage%%
+label-muted-foreground = #f39c12 
+label-volume = %{A3:pavucontrol:} %percentage%% %{A}
+label-volume-foreground = #48dbfb
+bar-volume-empty-foreground = #00d2d3
+
+##########################
+;CONFIG FILES TYPE2
+##########################
+[module/filesystem]
+type = internal/fs
+interval = 25
+format = <label>
+mount-0 = /
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = #2C3E50
+label-mounted = %{A:sudo gnome-disks:} %{A} %percentage_used%%
+label-mounted-foreground = #fed330
+
+###########################
+;MODULO KEYBOARD
+###########################
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+;blacklist-1 = scroll lock
+format-prefix-foreground = ${colors.foreground-alt}
+format-prefix-underline = #a29bfe
+label-layout = %layout%
+label-layout-underline = #a29bfe
+label-indicator = %name%
+label-indicator-padding = 2
+label-indicator-margin = 1
+;label-indicator-background = ${colors.secondary}
+label-indicator-underline = #a29bfe
+format-background = #7F7F7F
+
+#########################
+;MODULO DE BRILLO 
+#########################
+[module/xbacklight]
+type = internal/xbacklight
+output = eDP-1
+enable-scroll = true
+format = <ramp> 
+ramp-0 = %{A}🌕%{A}
+ramp-1 = %{A}🌔%{A}
+ramp-2 = %{A}🌓%{A}
+ramp-3 = %{A}🌒%{A}
+ramp-4 = %{A}🌑%{A}
+ramp-0-foreground = #fc5c65
+ramp-1-foreground = #fc5c65
+ramp-2-foreground = #fc5c65
+ramp-3-foreground = #fc5c65
+ramp-4-foreground = #fc5c65
+
+###########################
+;MEMORY
+##########################
+[module/memory]
+type = internal/memory
+interval = 3
+format = <label> 
+;format-underline = #4bffdc
+;label = %percentage_used%%
+label =%{A:termite -e htop &:}%{A} %gb_used%
+label-alt = %{A:termite -e htop &:}%{A} %gb_used% %gb_total%
+format-foreground = #1dd1a1
+
+############################
+;CPU-SYSTEM
+############################
+[module/system-cpu]
+type = custom/script
+exec = ~/.config/polybar/plugins/cpu-frecuency.sh
+format-prefix =" "
+interval = 1
+format-prefix-foreground =  #55efc4
+label-foreground =  #55efc4
+
+##################################
+;BATTERY
+##################################
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = AC
+full-at = 100
+format = <ramp><label-full>
+format-charging = <animation-charging> <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+ramp-capacity-0 = %{A:xfce4-power-manager-settings:}%{A}
+ramp-capacity-foreground = #32ff7e
+animation-charging-0 = %{A:xfce4-power-manager-settings:}%{A}
+animation-charging-foreground = #fd79a8
+animation-charging-framerate = 200
+label-full = %{A1:xfce4-power-manager-settings:}%{F#fd79a8}%percentage%% %{A}
+label-discharging-foreground = #32ff7e
+label-charging-foreground = #fd79a8
+
+
+################################
+;TEMPERATURA
+################################
+[module/temperature]
+type = internal/temperature
+interval = 1
+thermal-zone = 0
+warn-temperature = 60
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon2/temp1_input
+format = <label>
+format-temperature-offset = 100
+format-warn = <label-warn>
+label = 🌡 %temperature-c%
+label-foreground = #a29bfe
+label-warn = 🌡 %temperature-c%
+label-warn-foreground = #fd79a8
+format-warn-foreground = #fd79a8
+
+#################################
+;DATE
+###############################
+[module/popup-calendar]
+type = internal/date
+format-prefix =" "  
+interval = 1
+format-foreground = #FFC312
+;format-underline =  #FFC312
+date = %Y-%m-%d  | 
+time = %H:%M:%S
+;label-font = 
+date-alt = %A, %d %B %Y
+time-alt = %H:%M:%S
+label = %date% %time%
+;format-foreground = #DFDFDF
+
+
+########################
+;TRAY
+###################
+[module/reset]
+type = custom/script
+exec = polybar -v
+format = <label>
+label =  %{A1:xfce4-settings-manager:}%{A} %{A1:flameshot gui:}%{A} %{A1:crow:}%{A} %{A1:system-config-printer:}%{A} %{A1:xfce4-session-logout:}%{A}
+label-background = #353B48
+format-underline = #000000
+format-foreground = #DFDFDF
+; %{A1:pkill polybar && polybar mybar:}%{A}
+########################
+;UPDATE-POLY
+###################
+[module/airplane]
+type = custom/script
+exec = nmcli networking on
+format = <label><ramp>
+;label = %{A1:nmcli networking off:}%{A}
+
+######################################
+;SSH INFO
+##########################################
+[module/info-ssh-sessions]
+type = custom/script
+exec = ~/.config/polybar/plugins/ssh.sh
+interval = 1
+;label-background = #2C3E50
+format-underline = #2C3E50
+format-foreground = #2C3E50
+#########################################
+;info-softwarecounter
+#########################################
+[module/info-softwarecounter]
+type = custom/script
+exec = ~/.config/polybar/plugins/info-softwarecounter.py
+interval = 5
+;format-underline = #FFC312
+format-foreground = #FFC312
+########################################
+;Bluetooth
+##########################################
+[module/isrunning-bluetooth]
+type = custom/script
+exec = ~/.config/polybar/plugins/bluetooth.sh
+interval = 1
+;format-underline = #2C3E50
+format-foreground = #fed330
+;Bluetooth
+##########################################
+[module/ip_pub]
+type = custom/script
+exec = ~/.config/polybar/plugins/ip_pub.sh
+interval = 1
+label = %output%
+;format-underline = #2C3E50
+format-foreground = #2ed573
+####################################
+;NETWORK SPEED wireless
+####################################
+[module/up-down]
+type = internal/network
+interface = wlp3s0
+interval = 2
+label-connected =🠹 %upspeed:0% 🠻 %downspeed:0%
+label-connected-foreground = #fa8231
+label-maxlen = 26
+label-minlen = 25
+#####################################
+;nmap
+####################################
+[module/nmap]
+type = custom/script
+exec = ~/.config/polybar/plugins/nmap.sh
+interval = 1
+label = %output%
+label-maxlen = 26
+###########################
+;Custom Menu
+###########################
+[module/menu-apps]
+type = custom/menu
+expand-right = true
+menu-0-0 = Browsers
+menu-0-0-exec = menu-open-1
+menu-0-1 = Multimedia
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = Firefox
+menu-1-0-exec = firefox &
+menu-1-1 = Chromium
+menu-1-1-exec = chromium &
+
+menu-2-0 = Gimp
+menu-2-0-exec = gimp &
+menu-2-1 = Scrot
+menu-2-1-exec = scrot &
